@@ -1,24 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HeroPicker.Core
 {
     public class Team
     {
-        private List<Hero> heroes = new List<Hero>();
+        private readonly List<Hero> _heroes = new List<Hero>();
+
+        private const int MaxTeamMembers = 5;
+
+        public Team(Side side)
+        {
+            this.Side = side;
+        }
+
+        private Side Side { get; }
 
         public void AddHero(Hero hero)
         {
-            if (this.heroes.Count < 5)
+            if (this._heroes.Count < MaxTeamMembers)
             {
-                this.heroes.Add(hero);
+                if (this._heroes.Contains(hero))
+                {
+                    throw new ApplicationException($"This team already contains {hero.Name}");
+                }
+
+                this._heroes.Add(hero);
             }
             else
             {
-                throw new ApplicationException("Team can't contain more than 5 heroes");
+                throw new ApplicationException($"Team can't contain more than {MaxTeamMembers} heroes");
             }
         }
     }
